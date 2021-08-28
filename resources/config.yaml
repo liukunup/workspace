@@ -23,5 +23,5 @@ object-storage:
         type: minio
         host: nas.liukun.com
         port: 29001
-        username: R9I3ow49dvyZWiHY
-        password: rUF17yWxGPtC1K42
+        access_key: R9I3ow49dvyZWiHY
+        secret_key: rUF17yWxGPtC1K42

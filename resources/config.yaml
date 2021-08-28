@@ -1,0 +1,27 @@
+database:
+    - ds218-plus-test:
+        type: mysql
+        host: nas.liukun.com
+        port: 33306
+        username: root
+        password: wZ6try8MCNGi6n8P
+    - ds218-plus-prod:
+        type: mysql
+        host: nas.liukun.com
+        port: 13306
+        username: root
+        password: nStBK3KlUcC58yfF
+
+object-storage:
+    - ds218-plus-test:
+        type: minio
+        host: nas.liukun.com
+        port: 49001
+        access_key: LehXBoVThyyDU3vZ
+        secret_key: Ggi057AOL8ZRrvxv
+    - ds218-plus-prod:
+        type: minio
+        host: nas.liukun.com
+        port: 29001
+        username: R9I3ow49dvyZWiHY
+        password: rUF17yWxGPtC1K42

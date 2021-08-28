@@ -17,11 +17,11 @@ object-storage:
         type: minio
         host: nas.liukun.com
         port: 49001
-        access_key: LehXBoVThyyDU3vZ
-        secret_key: Ggi057AOL8ZRrvxv
+        access-key: LehXBoVThyyDU3vZ
+        secret-key: Ggi057AOL8ZRrvxv
     - ds218-plus-prod:
         type: minio
         host: nas.liukun.com
         port: 29001
-        access_key: R9I3ow49dvyZWiHY
-        secret_key: rUF17yWxGPtC1K42
+        access-key: R9I3ow49dvyZWiHY
+        secret-key: rUF17yWxGPtC1K42

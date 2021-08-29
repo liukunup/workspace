@@ -5,12 +5,12 @@
 ![Diagram](https://www.portainer.io/hubfs/Portainer-Diagram-jpg.jpeg)
 
 ## 文档推荐
-* 官网 [Portainer] (https://www.portainer.io/)
-* 镜像 [DockerHub] (https://registry.hub.docker.com/r/portainer/portainer-ce)
-* 快速入门 [QuickStart] (https://documentation.portainer.io/quickstart/)
-* 官方文档 [Document] (https://documentation.portainer.io/)
-* GitHub [Issues] (https://github.com/portainer/portainer/issues)
-* Slack [Slack] (https://join.slack.com/t/portainer/shared_invite/zt-txh3ljab-52QHTyjCqbe5RibC2lcjKA)
+* 官网 [Portainer](https://www.portainer.io/)
+* 镜像 [DockerHub](https://registry.hub.docker.com/r/portainer/portainer-ce)
+* 快速入门 [QuickStart](https://documentation.portainer.io/quickstart/)
+* 官方文档 [Document](https://documentation.portainer.io/)
+* GitHub [Issues](https://github.com/portainer/portainer/issues)
+* Slack [Slack](https://join.slack.com/t/portainer/shared_invite/zt-txh3ljab-52QHTyjCqbe5RibC2lcjKA)
 
 ## 镜像拉取
 ``` bash

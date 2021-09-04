@@ -52,6 +52,11 @@ def request_paper_list(url, debug=False):
             "pdf_url": base_url + tag_a_2["href"],
             "infos": tag_div.text.strip().replace("\n", "").replace("\r", "").replace("[bibtex]", ""),
         }
+        # 修复链接中缺少/链接符的问题
+        if not str(tag_a_1["href"]).startswith("/"):
+            paper_json["web_url"] = base_url + "/" + tag_a_1["href"]
+        if not str(tag_a_2["href"]).startswith("/"):
+            paper_json["pdf_url"] = base_url + "/" + tag_a_2["href"]
         if debug:
             print("-" * 100)
             print(json.dumps(paper_json, sort_keys=True, indent=4, separators=(',', ': ')))

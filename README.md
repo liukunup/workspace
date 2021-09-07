@@ -16,9 +16,19 @@
 ``` text
 --|
   | career 关于职业生涯规划的文档, 值得一看~
+  | crawler The CVF 顶会论文的网络爬虫
   | docker 关于容器技术的文档和脚本, 教你善用docker搭建开发环境
   | resources 嗯, 一些资源文件
   | utils 常用工具类
+```
+
+## 依赖库
+```
+导出依赖
+pip freeze > requirements.txt
+
+安装依赖
+pip install -r requirements.txt
 ```
 
 ## 联系方式

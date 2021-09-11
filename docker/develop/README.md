@@ -72,14 +72,17 @@ sh mkdirs_base.sh
 2. 创建容器服务
 docker-compose -p dev-base -f docker-compose-base.yaml up -d
 
-3. 停止容器服务
+停止容器服务
 docker-compose stop
 
-4. 重启容器服务
+移除容器服务
+docker-compose down
+
+重启容器服务
 docker-compose restart
 
-5. 移除容器服务
-docker-compose down
+删除持久化目录
+rm -rf ${HOME}/docker
 ```
 
 #### 已支持的应用列表

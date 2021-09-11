@@ -1,0 +1,217 @@
+version: '3.0'
+
+services:
+
+  portainer:
+    container_name: dev-stack-portainer
+    image: portainer/portainer-ce:2.6.2
+    restart: always
+    ports:
+      - 8000:8000
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOME}/docker/portainer:/data
+    networks:
+      - dev-stack
+
+  jupyter:
+    container_name: dev-stack-jupyter-notebook
+    image: jupyter/minimal-notebook:notebook-6.4.0
+    restart: always
+    ports:
+      - 8888:8888
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    volumes:
+      - ${HOME}/docker/jupyter/work:/home/jovyan/work
+    networks:
+      - dev-stack
+      
+  phpmyadmin:
+    container_name: dev-stack-phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.1.1
+    restart: always
+    ports:
+      - 9080:80
+    environment:
+      - PMA_HOSTS=mysql-test,mysql-prod
+      - PMA_PORT=3306
+    links:
+      - mysql-test
+      - mysql-prod
+    depends_on:
+      - mysql-test
+      - mysql-prod
+    networks:
+      - dev-stack
+      
+  mysql-test:
+    container_name: dev-stack-mysql-test
+    image: mysql:8.0.26
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 43306:3306
+    volumes:
+      - ${HOME}/docker/mysql/test:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=wZ6try8MCNGi6n8P
+    networks:
+      - dev-stack
+      
+  mysql-prod:
+    container_name: dev-stack-mysql-prod
+    image: mysql:8.0.26
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 23306:3306
+    volumes:
+      - ${HOME}/docker/mysql/prod:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=nStBK3KlUcC58yfF
+    networks:
+      - dev-stack
+      
+  rediscommander:
+    container_name: dev-stack-redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    ports:
+      - 9081:8081
+    environment:
+      - REDIS_HOSTS=local:redis-test:6379,local:redis-prod:6379
+    links:
+      - redis-test
+      - redis-prod
+    depends_on:
+      - redis-test
+      - redis-prod
+    networks:
+      - dev-stack
+      
+  redis-test:
+    container_name: dev-stack-redis-test
+    hostname: redis-test
+    image: redis:6.2.5
+    restart: always
+    command: redis-server --appendonly yes
+    ports:
+      - 46379:6379
+    volumes:
+      - ${HOME}/docker/redis/test:/data
+    networks:
+      - dev-stack
+      
+  redis-prod:
+    container_name: dev-stack-redis-prod
+    hostname: redis-prod
+    image: redis:6.2.5
+    restart: always
+    command: redis-server --appendonly yes
+    ports:
+      - 26379:6379
+    volumes:
+      - ${HOME}/docker/redis/prod:/data
+    networks:
+      - dev-stack
+      
+  minio-test:
+    container_name: dev-stack-minio-test
+    image: minio/minio:RELEASE.2021-08-25T00-41-18Z
+    restart: always
+    command: server /data --address ":9000" --console-address ":9001"
+    ports:
+      - 49000:9000
+      - 49001:9001
+    volumes:
+      - ${HOME}/docker/minio/test:/data
+    environment:
+      - MINIO_ROOT_USER=LehXBoVThyyDU3vZ
+      - MINIO_ROOT_PASSWORD=Ggi057AOL8ZRrvxv
+    networks:
+      - dev-stack
+      
+  minio-prod:
+    container_name: dev-stack-minio-prod
+    image: minio/minio:RELEASE.2021-08-25T00-41-18Z
+    restart: always
+    command: server /data --address ":9000" --console-address ":9001"
+    ports:
+      - 29000:9000
+      - 29001:9001
+    volumes:
+      - ${HOME}/docker/minio/prod:/data
+    environment:
+      - MINIO_ROOT_USER=R9I3ow49dvyZWiHY
+      - MINIO_ROOT_PASSWORD=rUF17yWxGPtC1K42
+    networks:
+      - dev-stack
+      
+  rabbitmq-test:
+    container_name: dev-stack-rabbitmq-test
+    image: rabbitmq:3.9.5-management
+    restart: always
+    hostname: rabbitmq-test
+    ports:
+      - 44369:4369
+      - 45671:5671
+      - 45672:5672
+      - 55672:15672
+      - 45692:15692
+    environment:
+      - RABBITMQ_DEFAULT_USER=mQwaIpnq6c69P4Sl
+      - RABBITMQ_DEFAULT_PASS=RyWqV44pf4XjyqRU
+      - RABBITMQ_DEFAULT_VHOST=vhost_rabbitmq_test
+    networks:
+      - dev-stack
+      
+  rabbitmq-prod:
+    container_name: dev-stack-rabbitmq-prod
+    image: rabbitmq:3.9.5-management
+    restart: always
+    hostname: rabbitmq-prod
+    ports:
+      - 24369:4369
+      - 25671:5671
+      - 25672:5672
+      - 35672:15672
+      - 25692:15692
+    environment:
+      - RABBITMQ_DEFAULT_USER=HjvY0TJMRPwXJmM9
+      - RABBITMQ_DEFAULT_PASS=VK5JMOqsC50MsOeC
+      - RABBITMQ_DEFAULT_VHOST=vhost_rabbitmq_prod
+    networks:
+      - dev-stack
+      
+  nginx-test:
+    container_name: dev-stack-nginx-test
+    image: nginx:1.21.3
+    restart: always
+    ports:
+      - 48080:80
+    volumes:
+      - ${HOME}/docker/nginx/test/logs:/var/log/nginx
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - dev-stack
+      
+  nginx-prod:
+    container_name: dev-stack-nginx-prod
+    image: nginx:1.21.3
+    restart: always
+    ports:
+      - 28080:80
+    volumes:
+      - ${HOME}/docker/nginx/prod/logs:/var/log/nginx
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - dev-stack
+      
+networks:
+  dev-stack:
+    driver: bridge

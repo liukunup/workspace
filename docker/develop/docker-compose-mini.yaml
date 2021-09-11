@@ -1,0 +1,139 @@
+version: '3.0'
+
+services:
+
+  portainer:
+    container_name: dev-stack-portainer
+    image: portainer/portainer-ce:2.6.2
+    restart: always
+    ports:
+      - 8000:8000
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOME}/docker/portainer:/data
+    networks:
+      - dev-stack
+
+  jupyter:
+    container_name: dev-stack-jupyter-notebook
+    image: jupyter/minimal-notebook:notebook-6.4.0
+    restart: always
+    ports:
+      - 8888:8888
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    volumes:
+      - ${HOME}/docker/jupyter/work:/home/jovyan/work
+    networks:
+      - dev-stack
+
+  phpmyadmin:
+    container_name: dev-stack-phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.1.1
+    restart: always
+    ports:
+      - 9080:80
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+    links:
+      - mysql
+    depends_on:
+      - mysql
+    networks:
+      - dev-stack
+      
+  mysql:
+    container_name: dev-stack-mysql
+    image: mysql:8.0.26
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 3306:3306
+    volumes:
+      - ${HOME}/docker/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=wZ6try8MCNGi6n8P
+    networks:
+      - dev-stack
+      
+  rediscommander:
+    container_name: dev-stack-redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    ports:
+      - 9081:8081
+    environment:
+      - REDIS_HOST=local:redis:6379
+    links:
+      - redis
+    depends_on:
+      - redis
+    networks:
+      - dev-stack
+      
+  redis:
+    container_name: dev-stack-redis
+    hostname: redis-test
+    image: redis:6.2.5
+    restart: always
+    command: redis-server --appendonly yes
+    ports:
+      - 6379:6379
+    volumes:
+      - ${HOME}/docker/redis:/data
+    networks:
+      - dev-stack
+      
+  minio:
+    container_name: dev-stack-minio
+    image: minio/minio:RELEASE.2021-08-25T00-41-18Z
+    restart: always
+    command: server /data --address ":9000" --console-address ":9001"
+    ports:
+      - 9081:9000
+      - 9001:9001
+    volumes:
+      - ${HOME}/docker/minio:/data
+    environment:
+      - MINIO_ROOT_USER=LehXBoVThyyDU3vZ
+      - MINIO_ROOT_PASSWORD=Ggi057AOL8ZRrvxv
+    networks:
+      - dev-stack
+
+  rabbitmq:
+    container_name: dev-stack-rabbitmq
+    image: rabbitmq:3.9.5-management
+    restart: always
+    hostname: rabbitmq
+    ports:
+      - 4369:4369
+      - 5671:5671
+      - 5672:5672
+      - 15672:15672
+      - 15692:15692
+    environment:
+      - RABBITMQ_DEFAULT_USER=mQwaIpnq6c69P4Sl
+      - RABBITMQ_DEFAULT_PASS=RyWqV44pf4XjyqRU
+      - RABBITMQ_DEFAULT_VHOST=vhost_rabbitmq
+    networks:
+      - dev-stack
+
+  nginx:
+    container_name: dev-stack-nginx
+    image: nginx:1.21.3
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - ${HOME}/docker/nginx/logs:/var/log/nginx
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - dev-stack
+      
+networks:
+  dev-stack:
+    driver: bridge

@@ -23,8 +23,9 @@
             * 测试环境
             * 生产环境
     * Redis Commander
-        * Redis 测试环境
-        * Redis 生产环境
+        * Redis
+            * 测试环境
+            * 生产环境
     * MinIO
         * 测试环境
         * 生产环境
@@ -47,8 +48,9 @@
             * 测试环境
             * 生产环境
     * Redis Commander
-        * Redis 测试环境
-        * Redis 生产环境
+        * Redis
+            * 测试环境
+            * 生产环境
     * MinIO
         * 测试环境
         * 生产环境

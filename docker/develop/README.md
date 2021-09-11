@@ -83,36 +83,36 @@ docker-compose down
 #### 已支持的应用列表
 
 * 可视化容器管理
-    * ✅Portainer
+    * ✅ Portainer
 * 数据库 DB
     * 关系型数据库
-        * ✅phpMyAdmin
-        * ✅MySQL
-        * ✅MariaDB
-        * ❌PostgreSQL
+        * ✅ phpMyAdmin
+        * ✅ MySQL
+        * ✅ MariaDB
+        * ❌ PostgreSQL
     * NoSQL数据库
-        * ✅Redis Commander
-        * ✅Redis
-        * ❌MongoDB
-        * ❌Memcached
+        * ✅ Redis Commander
+        * ✅ Redis
+        * ❌ MongoDB
+        * ❌ Memcached
 * 对象存储 OS
-    * ✅MinIO
-    * ❌Ceph
+    * ✅ MinIO
+    * ❌ Ceph
 * 消息队列 MQ
-    * ✅RabbitMQ
-    * ❌RocketMQ
-    * ❌Kafka
-    * ❌MQTT
+    * ✅ RabbitMQ
+    * ❌ RocketMQ
+    * ❌ Kafka
+    * ❌ MQTT
 * 日志服务 SLS
     * ELK
-        * ❌ElasticSearch
-        * ❌Kibana
-        * ❌Logstash
+        * ❌ ElasticSearch
+        * ❌ Kibana
+        * ❌ Logstash
 * 负载均衡 SLB
-    * ✅Nginx
+    * ✅ Nginx
 * 监控 Monitor
-    * ❌Prometheus
-        * ❌cadvisor
-        * ❌node-exporter
-        * ❌dcgm-exporter
-    * ✅Grafana
+    * ❌ Prometheus
+        * ❌ cadvisor
+        * ❌ node-exporter
+        * ❌ dcgm-exporter
+    * ✅ Grafana

@@ -20,7 +20,7 @@ services:
       - elk-stack
 
   elasticsearch:
-    container_name: elk-stack-kibana
+    container_name: elk-stack-elasticsearch
     image: elasticsearch:7.14.1
     hostname: elasticsearch
     restart: always
@@ -28,6 +28,7 @@ services:
       - 9200:9200
       - 9300:9300
     environment:
+      - ELASTIC_PASSWORD=changeme
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     volumes:
       - type: bind

@@ -1,0 +1,78 @@
+version: '3'
+
+services:
+
+  kibana:
+    container_name: elk-stack-kibana
+    image: kibana:7.14.1
+    hostname: kibana
+    restart: always
+    ports:
+      - 5601:5601
+    volumes:
+      - type: bind
+        source: ${HOME}/elk/kibana/kibana.yaml
+        target: /usr/share/kibana/config/kibana.yml
+        read_only: true
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk-stack
+
+  elasticsearch:
+    container_name: elk-stack-kibana
+    image: elasticsearch:7.14.1
+    hostname: elasticsearch
+    restart: always
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    volumes:
+      - type: bind
+        source: ${HOME}/elk/elasticsearch/elasticsearch.yaml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: volume
+        source: es-data
+        target: /usr/share/elasticsearch/data
+      - type: volume
+        source: es-plugins
+        target: /usr/share/elasticsearch/plugins  
+    networks:
+      - elk-stack
+
+  logstash:
+    container_name: elk-stack-logstash
+    image: logstash:7.14.1
+    hostname: elk-logstash
+    restart: always
+    ports:
+      - 4560:4560
+    environment:
+      - LS_JAVA_OPTS=-Xms512m -Xmx512m
+      - TZ=Asia/Shanghai
+    volumes:
+      - type: bind
+        source: ${HOME}/elk/logstash/logstash.yaml
+        target: /usr/share/logstash/config/logstash.yml
+        read_only: true
+      - type: bind
+        source: ${HOME}/elk/logstash/pipeline
+        target: /usr/share/logstash/pipeline
+        read_only: true
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch:es
+    networks:
+      - elk-stack
+
+volumes:
+  es-data:
+  es-plugins:
+
+networks:
+  elk-stack:
+    driver: bridge

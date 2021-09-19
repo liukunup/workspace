@@ -1,3 +1,5 @@
 beautifulsoup4==4.9.3
 minio==7.1.0
 PyYAML==5.4.1
+numpy==1.21.2
+opencv-python==4.5.3.56

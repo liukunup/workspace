@@ -73,16 +73,18 @@ class Config(object):
             return None
 
     def __get_conf_from_database(self, node, tag):
-        db = pymysql.connect(host=self.__host, port=self.__port, user=self.__username, password=self.__password, database=self.__database)
+        db = pymysql.connect(host=self.__host, port=self.__port, user=self.__username, password=self.__password,
+                             database=self.__database)
         cursor = db.cursor()
         params = None
+        sql = f"SELECT params FROM `{self.__table}` WHERE `node` = '{node}' AND `tag` = '{tag}'"
         try:
-            sql = f"SELECT params FROM `{self.__table}` WHERE `node` = '{node}' AND `tag` = '{tag}'"
             cursor.execute(sql)
             result = cursor.fetchone()
             if result is not None and len(result) == 1:
                 params = result[0]
-        except Exception:
+        except Exception as e:
+            print(e)
             print("ERROR: ", sql)
         db.close()
         return params
@@ -97,12 +99,3 @@ class Config(object):
             return e[tag]
         print(f'Can not find {node} tag={tag} in yaml!!!')
         return None
-
-
-if __name__ == '__main__':
-    inst = Config(filename='../resources/config.yaml')
-    # inst = Config(host='127.0.0.1', port=3306, username='root', password='123456')
-    print('-' * 100)
-    print(inst.get_database('ds218-plus-test'))
-    print(inst.get_object_storage('ds218-plus-test'))
-    pass

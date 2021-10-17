@@ -17,11 +17,14 @@ def execute(cmd, ip=None, port=5555, device_id=None, debug=False):
     :return: 执行结果
     """
     # 执行指令时加装 地址:端口
-    if not ip and port > 1000:
+    if ip is not None and port > 1000:
         cmd = f'adb {ip}:{port} {cmd}'
     # 执行指令时加装 设备ID 高优先级哦
-    if not device_id:
+    if device_id is not None:
         cmd = f'adb {device_id} {cmd}'
+    # 如果都未命中
+    if not cmd.startswith('adb'):
+        cmd = f'adb {cmd}'
     # 打印待执行指令
     if debug:
         print(cmd)

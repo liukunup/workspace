@@ -1,0 +1,57 @@
+version: '3.0'
+
+services:
+
+  phpmyadmin:
+    container_name: database-stack-phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.1.1
+    restart: always
+    ports:
+      - 9080:80
+    environment:
+      - PMA_HOSTS=mysql-master,mysql-slave
+      - PMA_PORT=3306
+    links:
+      - mysql-master
+      - mysql-slave
+    depends_on:
+      - mysql-master
+      - mysql-slave
+    networks:
+      - database-stack
+
+  mysql-master:
+    container_name: database-stack-master
+    image: mysql:8
+    hostname: mysql-master
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 3306:3306
+    volumes:
+      - ${HOME}/docker/mysql/master:/var/lib/mysql
+      - ${HOME}/docker/mysql/conf/master:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=wZ6try8MCNGi6n8P
+    networks:
+      - database-stack
+
+  mysql-slave:
+    container_name: database-stack-slave
+    image: mysql:8
+    hostname: mysql-slave
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 63306:3306
+    volumes:
+      - ${HOME}/docker/mysql/slave:/var/lib/mysql
+      - ${HOME}/docker/mysql/conf/slave:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=wZ6try8MCNGi6n8P
+    networks:
+      - database-stack
+
+networks:
+  database-stack:
+    driver: bridge

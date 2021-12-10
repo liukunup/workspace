@@ -1,4 +1,4 @@
-version: '3.0'
+version: '3'
 
 services:
 
@@ -8,114 +8,112 @@ services:
     hostname: redis-commander
     restart: always
     ports:
-      - 9081:8081
+      - "9081:8081"
     environment:
-      - REDIS_HOSTS=master:redis-master:6379:0:kyUQ9xf7knPbYCQt,slave1:redis-slave1:6379:1:J8u73C7zfH0VPWeU,slave2:redis-slave2:6379:2:fZg1AiarLQgrGSZz
-    links:
-      - master:redis-master
-      - slave1:redis-slave1
-      - slave2:redis-slave2
+      - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
+      - REDIS_HOSTS=master:redis-master:6379:0:kyUQ9xf7knPbYCQt,slave1:redis-slave-1:6379:0:J8u73C7zfH0VPWeU,slave2:redis-slave-2:6379:0:fZg1AiarLQgrGSZz
     depends_on:
       - master
       - slave1
       - slave2
     networks:
-      - redis-stack
+      - redis-network
 
   master:
-    image: redis:6.2.6
+    image: redis:6
     container_name: redis-master
     restart: always
     command: redis-server --requirepass kyUQ9xf7knPbYCQt --appendonly yes
     ports:
-      - 6379:6379
+      - "6379:6379"
     environment:
       - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
     volumes:
       - ${HOME}/docker/redis/master:/data
     networks:
-      - redis-stack
+      - redis-network
 
   slave1:
-    image: redis:6.2.6
+    image: redis:6
     container_name: redis-slave-1
     restart: always
-    command: redis-server --slaveof redis-master 6379 --requirepass J8u73C7zfH0VPWeU --masterauth kyUQ9xf7knPbYCQt --appendonly yes --slave-read-only yes
+    command: redis-server --replicaof redis-master 6379 --requirepass J8u73C7zfH0VPWeU --masterauth kyUQ9xf7knPbYCQt --appendonly yes
     ports:
-      - 6380:6379
+      - "6381:6379"
     environment:
       - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
     volumes:
       - ${HOME}/docker/redis/slave1:/data
     depends_on:
       - master
     networks:
-      - redis-stack
+      - redis-network
 
   slave2:
-    image: redis:6.2.6
+    image: redis:6
     container_name: redis-slave-2
     restart: always
-    command: redis-server --slaveof redis-master 6379 --requirepass fZg1AiarLQgrGSZz --masterauth kyUQ9xf7knPbYCQt --appendonly yes --slave-read-only yes
+    command: redis-server --replicaof redis-master 6379 --requirepass fZg1AiarLQgrGSZz --masterauth kyUQ9xf7knPbYCQt --appendonly yes
     ports:
-      - 6381:6379
+      - "6382:6379"
     environment:
       - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
     volumes:
       - ${HOME}/docker/redis/slave2:/data
     depends_on:
       - master
     networks:
-      - redis-stack
+      - redis-network
 
   sentinel1:
-    image: redis:6.2.6
+    image: redis:6
     container_name: redis-sentinel-1
     restart: always
     command: ["redis-sentinel", "/usr/local/etc/redis/redis-sentinel.conf"]
     environment:
       - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
     volumes:
       - ${HOME}/docker/redis/redis-sentinel-1.conf:/usr/local/etc/redis/redis-sentinel.conf
-    links:
-      - master:redis-master
     depends_on:
       - master
     networks:
-      - redis-stack
+      - redis-network
 
   sentinel2:
-    image: redis:6.2.6
+    image: redis:6
     container_name: redis-sentinel-2
     restart: always
     command: ["redis-sentinel", "/usr/local/etc/redis/redis-sentinel.conf"]
     environment:
       - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
     volumes:
       - ${HOME}/docker/redis/redis-sentinel-2.conf:/usr/local/etc/redis/redis-sentinel.conf
-    links:
-      - slave1:redis-slave-1
     depends_on:
       - slave1
     networks:
-      - redis-stack
+      - redis-network
 
   sentinel3:
-    image: redis:6.2.6
+    image: redis:6
     container_name: redis-sentinel-3
     restart: always
     command: ["redis-sentinel", "/usr/local/etc/redis/redis-sentinel.conf"]
     environment:
       - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
     volumes:
-      - ${HOME}/docker/redis/redis-sentinel-2.conf:/usr/local/etc/redis/redis-sentinel.conf
-    links:
-      - slave2:redis-slave-2
+      - ${HOME}/docker/redis/redis-sentinel-3.conf:/usr/local/etc/redis/redis-sentinel.conf
     depends_on:
       - slave2
     networks:
-      - redis-stack
+      - redis-network
 
 networks:
-  redis-stack:
+  redis-network:
     driver: bridge

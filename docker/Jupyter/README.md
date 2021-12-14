@@ -32,15 +32,18 @@ mkdir ${HOME}/docker/jupyter
 docker run -d \
     -p 8888:8888 \
     -e JUPYTER_ENABLE_LAB=yes \
+    -e GRANT_SUDO=yes \
     -v ${HOME}/docker/jupyter:/home/jovyan/work \
     --restart=always \
     --name=workspace-jupyter \
-    jupyter/minimal-notebook:notebook-6.4.0
+    jupyter/minimal-notebook:notebook-6.4.0 start-notebook.sh \
+    --NotebookApp.password='sha1:a7c0702d28e9:8a8868c5d4ea33af70e04c634487402b3997f40c' \
+    --NotebookApp.base_url=/jupyter/
 ```
 
 ## 测试验证
 
-* 打开网站 http://your-ip:8888
+* 打开网站 http://your-ip:8888/jupyter/
 * 在命令行窗口输入"docker ps"查找刚刚创建的容器实例
 * 通过命令行"docker logs [容器id]"查看日志, 找到token用于登陆
 * enjoy >_<

@@ -34,7 +34,7 @@ docker run -d \
     -v ${HOME}/docker/portainer:/data \
     --restart=always \
     --name=workspace-portainer \
-    portainer/portainer-ce:2.6.2
+    portainer/portainer-ce:2.11.0
 ```
 
 ## 测试验证

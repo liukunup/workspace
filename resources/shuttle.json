@@ -1,0 +1,131 @@
+{
+    "_comments":[
+        "Valid terminals include: 'Terminal.app' or 'iTerm'",
+        "In the editor value change 'default' to 'nano', 'vi', or another terminal based editor.",
+        "Hosts will also be read from your ~/.ssh/config or /etc/ssh_config file, if available",
+        "For more information on how to configure, please see http://fitztrev.github.io/shuttle/"
+    ],
+    "editor":"default",
+    "launch_at_login":false,
+    "terminal":"Terminal.app",
+    "iTerm_version":"nightly",
+    "default_theme":"Homebrew",
+    "open_in":"new",
+    "show_ssh_config_hosts":false,
+    "ssh_config_ignore_hosts":[  ],
+    "ssh_config_ignore_keywords":[  ],
+    "hosts":[
+        {
+            "Application":[
+                {
+                    "name":"Portainer [开发机]",
+                    "cmd":"http://aio.liukun.com:9000"
+                },
+                {
+                    "name":"Grafana [开发机]",
+                    "cmd":"http://aio.liukun.com:3000"
+                },
+                {
+                    "name":"phpMyAdmin [开发机]",
+                    "cmd":"http://aio.liukun.com:9080"
+                },
+                {
+                    "name":"RedisCommander [开发机]",
+                    "cmd":"http://aio.liukun.com:9081"
+                },
+                {
+                    "name":"Jupyter Notebook [开发机]",
+                    "cmd":"http://aio.liukun.com:8888"
+                },
+                {
+                    "name":"Nginx [堡垒机]",
+                    "cmd":"http://bastion.liukun.com"
+                },
+                {
+                    "name":"Portainer [堡垒机]",
+                    "cmd":"http://bastion.liukun.com:9000"
+                },
+                {
+                    "name":"JumpServer [堡垒机]",
+                    "cmd":"http://bastion.liukun.com:10000"
+                }
+            ]
+        },
+        {
+            "PVE VM":[
+                {
+                    "name":"堡垒机",
+                    "cmd":"ssh liukunup@bastion.liukun.com"
+                },
+                {
+                    "name":"花生壳",
+                    "cmd":"ssh liukunup@hsk.liukun.com"
+                },
+                {
+                    "name":"开发机",
+                    "cmd":"ssh liukunup@aio.liukun.com"
+                }
+            ]
+        },
+        {
+            "DSM":[
+                {
+                    "name":"DS218-Plus",
+                    "cmd":"http://nas.liukun.com:5000"
+                },
+                {
+                    "name":"WordPress",
+                    "cmd":"http://nas.liukun.com:8086"
+                },
+                {
+                    "name":"Drawio",
+                    "cmd":"http://nas.liukun.com:28085"
+                },
+                {
+                    "name":"Gogs",
+                    "cmd":"http://nas.liukun.com:28080"
+                },
+                {
+                    "name":"Jenkins",
+                    "cmd":"http://nas.liukun.com:8080"
+                },
+                {
+                    "name":"phpMyAdmin",
+                    "cmd":"http://nas.liukun.com:9080"
+                },
+                {
+                    "name":"RedisCommander",
+                    "cmd":"http://nas.liukun.com:28081"
+                },
+                {
+                    "name":"Minio",
+                    "cmd":"http://nas.liukun.com:49000"
+                }
+            ]
+        },
+        {
+            "BareMachine":[
+                {
+                    "name":"本地服务器 Web [c4m16]",
+                    "cmd":"https://c4m16.liukun.com:8006"
+                },
+                {
+                    "name":"本地服务器 SSH [c4m16]",
+                    "cmd":"ssh liukunup@c4m16.liukun.com"
+                },
+                {
+                    "name":"本地服务器 Web [c48m64g1]",
+                    "cmd":"https://c48m64g1.liukun.com:8006"
+                },
+                {
+                    "name":"本地服务器 SSH [c48m64g1]",
+                    "cmd":"ssh liukunup@c48m64g1.liukun.com"
+                },
+                {
+                    "name":"[阿里云]Ubuntu 18.04 - 119.23.51.28",
+                    "cmd":"ssh root@119.23.51.28"
+                }
+            ]
+        }
+    ]
+}

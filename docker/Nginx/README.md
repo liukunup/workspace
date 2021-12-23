@@ -34,6 +34,15 @@ docker run -d \
   nginx:latest
 ```
 
+docker run -d \
+  -p 80:80 \
+  --restart=always \
+  --name=workspace-nginx \
+  nginx:latest
+
+
+
+
 ``` bash
 version: '3'
 
@@ -125,7 +134,7 @@ var liukunup = {
 
 
 
-
+docker cp nginx workspace-nginx:/etc/
 
 
 

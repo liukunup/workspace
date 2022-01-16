@@ -62,11 +62,11 @@ docker run -d \
 ``` bash
 mkdir ${HOME}/docker
 mkdir ${HOME}/docker/mysql
-mkdir ${HOME}/docker/mysql/master
-mkdir ${HOME}/docker/mysql/slave
+mkdir ${HOME}/docker/mysql/main
+mkdir ${HOME}/docker/mysql/replica
 mkdir ${HOME}/docker/mysql/conf
-mkdir ${HOME}/docker/mysql/conf/master
-mkdir ${HOME}/docker/mysql/conf/slave
+mkdir ${HOME}/docker/mysql/conf/main
+mkdir ${HOME}/docker/mysql/conf/replica
 ```
 
 #### 2.2 拉起镜像
@@ -74,11 +74,11 @@ mkdir ${HOME}/docker/mysql/conf/slave
 ``` bash
 docker run -d \
     -p 3306:3306 \
-    -v ${HOME}/docker/mysql/master:/var/lib/mysql \
-    -v ${HOME}/docker/mysql/conf/master:/etc/mysql/conf.d \
+    -v ${HOME}/docker/mysql/main:/var/lib/mysql \
+    -v ${HOME}/docker/mysql/conf/main:/etc/mysql/conf.d:ro \
     -e MYSQL_ROOT_PASSWORD=wZ6try8MCNGi6n8P \
     --restart=always \
-    --name=workspace-mysql-master \
+    --name=xxx-mysql-main \
     mysql:8 \
     --character-set-server=utf8mb4 \
     --collation-server=utf8mb4_unicode_ci
@@ -87,11 +87,11 @@ docker run -d \
 ``` bash
 docker run -d \
     -p 63306:3306 \
-    -v ${HOME}/docker/mysql/slave:/var/lib/mysql \
-    -v ${HOME}/docker/mysql/conf/slave:/etc/mysql/conf.d \
+    -v ${HOME}/docker/mysql/replica:/var/lib/mysql \
+    -v ${HOME}/docker/mysql/conf/replica:/etc/mysql/conf.d:ro \
     -e MYSQL_ROOT_PASSWORD=wZ6try8MCNGi6n8P \
     --restart=always \
-    --name=workspace-mysql-slave \
+    --name=xxx-mysql-replica \
     mysql:8 \
     --character-set-server=utf8mb4 \
     --collation-server=utf8mb4_unicode_ci
@@ -109,12 +109,8 @@ docker run -d \
 server-id=100
 ## 二进制日志
 log-bin=mysql-bin
-## 错误日志
-log-err=mysql-err
 ## 日志格式
 binlog_format=mixed
-## 过期清理时间
-expire_logs_days=30
 ## 日志文件大小
 max_binlog_size=100m
 ```
@@ -125,7 +121,7 @@ max_binlog_size=100m
 # 创建用户
 CREATE USER 'HEebDKdG'@'%' IDENTIFIED BY 'FnVYR8Hno&kHp3sN';
 # 备注: MySQL 8.0 密码认证插件需要修改(caching_sha2_password), 改完记得密码也改一下. 或者手动创建这个用户.
-ALTER USER 'HEebDKdG'@'%' IDENTIFIED WITH mysql_native_password BY 'root';
+ALTER USER 'HEebDKdG'@'%' IDENTIFIED WITH mysql_native_password BY 'FnVYR8Hno&kHp3sN';
 # 分配权限
 GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'HEebDKdG'@'%';
 # 刷新权限
@@ -139,7 +135,7 @@ FLUSH PRIVILEGES;
 SHOW MASTER STATUS;
 ```
 
-记录查询到的File/Position值.(例如: mysql-bin.000003/1860)
+记录查询到的File/Position值.(例如: mysql-bin.000003/1164)
 
 **从服务器配置**
 
@@ -151,8 +147,6 @@ SHOW MASTER STATUS;
 server-id=101
 ## 二进制日志
 log-bin=mysql-bin
-## 错误日志
-log-err=mysql-err
 ## 中继日志
 relay-log=mysql-relay-bin
 ```
@@ -162,12 +156,12 @@ relay-log=mysql-relay-bin
 ``` sql
 # 配置同步参数
 CHANGE REPLICATION SOURCE TO 
-SOURCE_HOST = 'mysql-master',
+SOURCE_HOST = 'mysql-main',
 SOURCE_USER = 'HEebDKdG',
 SOURCE_PASSWORD = 'FnVYR8Hno&kHp3sN',
 SOURCE_PORT = 3306,
 SOURCE_LOG_FILE = 'mysql-bin.000003',
-SOURCE_LOG_POS = 1860,
+SOURCE_LOG_POS = 1164,
 SOURCE_CONNECT_RETRY = 30;
 # 查询Slave状态
 SHOW SLAVE STATUS;
@@ -183,69 +177,70 @@ STOP REPLICA;
 ### 3. Docker Compose 脚本文件
 
 ``` docker-compose
-version: '3.0'
+version: '3'
 
 services:
 
   phpmyadmin:
-    container_name: database-stack-phpmyadmin
+    container_name: mysql-stack-phpmyadmin
     image: phpmyadmin/phpmyadmin:5.1.1
+    hostname: phpmyadmin
     restart: always
     ports:
-      - 9080:80
+      - "9080:80"
     environment:
-      - PMA_HOSTS=mysql-master,mysql-slave
+      - PMA_HOSTS=mysql-main,mysql-replica
       - PMA_PORT=3306
     links:
-      - mysql-master
-      - mysql-slave
+      - mysql-main
+      - mysql-replica
     depends_on:
-      - mysql-master
-      - mysql-slave
+      - mysql-main
+      - mysql-replica
     networks:
-      - database-stack
+      - mysql-stack
 
-  mysql-master:
-    container_name: database-stack-master
+  mysql-main:
+    container_name: mysql-stack-main
     image: mysql:8
-    hostname: mysql-master
+    hostname: mysql-main
     restart: always
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
-      - 3306:3306
+      - "3306:3306"
     volumes:
-      - ${HOME}/docker/mysql/master:/var/lib/mysql
-      - ${HOME}/docker/mysql/conf/master:/etc/mysql/conf.d
+      - ${HOME}/docker/mysql/main:/var/lib/mysql
+      - ${HOME}/docker/mysql/conf/main:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ROOT_PASSWORD=wZ6try8MCNGi6n8P
     networks:
-      - database-stack
+      - mysql-stack
 
-  mysql-slave:
-    container_name: database-stack-slave
+  mysql-replica:
+    container_name: mysql-stack-replica
     image: mysql:8
-    hostname: mysql-slave
+    hostname: mysql-replica
     restart: always
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
-      - 63306:3306
+      - "3307:3306"
     volumes:
-      - ${HOME}/docker/mysql/slave:/var/lib/mysql
-      - ${HOME}/docker/mysql/conf/slave:/etc/mysql/conf.d
+      - ${HOME}/docker/mysql/replica:/var/lib/mysql
+      - ${HOME}/docker/mysql/conf/replica:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ROOT_PASSWORD=wZ6try8MCNGi6n8P
     networks:
-      - database-stack
+      - mysql-stack
 
 networks:
-  database-stack:
+  mysql-stack:
     driver: bridge
 ```
 
 - 拉起、销毁的脚本
 
 ``` shell
-docker-compose up -d
+docker-compose -f xxx.yaml up -d
 docker-compose down
 ```
 
@@ -254,17 +249,3 @@ docker-compose down
 
 * 使用"MySQL Workbench"或"phpMyAdmin"来连接数据库进行验证和体验
 * enjoy >_<
-
-## 问题反馈
-
-* 邮件 (liukunwlb#163.com, 把#换成@)
-* 微信 liukun250596945
-
-## 关于作者
-
-``` javascript
-var liukunup = {
-  nickname  : "我的代码温柔如风",
-  site : "http://liukunup.com"
-}
-```

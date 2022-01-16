@@ -1,57 +1,58 @@
-version: '3.0'
+version: '3'
 
 services:
 
   phpmyadmin:
-    container_name: database-stack-phpmyadmin
+    container_name: mysql-stack-phpmyadmin
     image: phpmyadmin/phpmyadmin:5.1.1
+    hostname: phpmyadmin
     restart: always
     ports:
-      - 9080:80
+      - "9080:80"
     environment:
-      - PMA_HOSTS=mysql-master,mysql-slave
+      - PMA_HOSTS=mysql-main,mysql-replica
       - PMA_PORT=3306
     links:
-      - mysql-master
-      - mysql-slave
+      - mysql-main
+      - mysql-replica
     depends_on:
-      - mysql-master
-      - mysql-slave
+      - mysql-main
+      - mysql-replica
     networks:
-      - database-stack
+      - mysql-stack
 
-  mysql-master:
-    container_name: database-stack-master
+  mysql-main:
+    container_name: mysql-stack-main
     image: mysql:8
-    hostname: mysql-master
+    hostname: mysql-main
     restart: always
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
-      - 3306:3306
+      - "3306:3306"
     volumes:
-      - ${HOME}/docker/mysql/master:/var/lib/mysql
-      - ${HOME}/docker/mysql/conf/master:/etc/mysql/conf.d
+      - ${HOME}/docker/mysql/main:/var/lib/mysql
+      - ${HOME}/docker/mysql/conf/main:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ROOT_PASSWORD=wZ6try8MCNGi6n8P
     networks:
-      - database-stack
+      - mysql-stack
 
-  mysql-slave:
-    container_name: database-stack-slave
+  mysql-replica:
+    container_name: mysql-stack-replica
     image: mysql:8
-    hostname: mysql-slave
+    hostname: mysql-replica
     restart: always
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
-      - 63306:3306
+      - "3307:3306"
     volumes:
-      - ${HOME}/docker/mysql/slave:/var/lib/mysql
-      - ${HOME}/docker/mysql/conf/slave:/etc/mysql/conf.d
+      - ${HOME}/docker/mysql/replica:/var/lib/mysql
+      - ${HOME}/docker/mysql/conf/replica:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ROOT_PASSWORD=wZ6try8MCNGi6n8P
     networks:
-      - database-stack
+      - mysql-stack
 
 networks:
-  database-stack:
+  mysql-stack:
     driver: bridge

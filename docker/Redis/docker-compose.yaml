@@ -2,9 +2,9 @@ version: '3'
 
 services:
 
-  rediscommander:
+  redis-commander:
     image: rediscommander/redis-commander:latest
-    container_name: redis-commander
+    container_name: redis-stack-redis-commander
     hostname: redis-commander
     restart: always
     ports:
@@ -12,17 +12,21 @@ services:
     environment:
       - TZ=Asia/Shanghai
       - LANG=en_US.UTF-8
-      - REDIS_HOSTS=master:redis-master:6379:0:kyUQ9xf7knPbYCQt,slave1:redis-slave-1:6379:0:J8u73C7zfH0VPWeU,slave2:redis-slave-2:6379:0:fZg1AiarLQgrGSZz
+      - REDIS_HOSTS=master:redis-stack-master:6379:0:kyUQ9xf7knPbYCQt,slave1:redis-stack-slave-1:6379:0:kyUQ9xf7knPbYCQt,slave2:redis-stack-slave-2:6379:0:kyUQ9xf7knPbYCQt
     depends_on:
       - master
       - slave1
       - slave2
+      - sentinel1
+      - sentinel2
+      - sentinel3
     networks:
-      - redis-network
+      - redis-stack
 
   master:
     image: redis:6
-    container_name: redis-master
+    container_name: redis-stack-master
+    hostname: redis-stack-master
     restart: always
     command: redis-server --requirepass kyUQ9xf7knPbYCQt --appendonly yes
     ports:
@@ -33,13 +37,14 @@ services:
     volumes:
       - ${HOME}/docker/redis/master:/data
     networks:
-      - redis-network
+      - redis-stack
 
   slave1:
     image: redis:6
-    container_name: redis-slave-1
+    container_name: redis-stack-slave-1
+    hostname: redis-stack-slave-1
     restart: always
-    command: redis-server --replicaof redis-master 6379 --requirepass J8u73C7zfH0VPWeU --masterauth kyUQ9xf7knPbYCQt --appendonly yes
+    command: redis-server --replicaof redis-stack-master 6379 --requirepass kyUQ9xf7knPbYCQt --masterauth kyUQ9xf7knPbYCQt --appendonly yes
     ports:
       - "6381:6379"
     environment:
@@ -50,13 +55,14 @@ services:
     depends_on:
       - master
     networks:
-      - redis-network
+      - redis-stack
 
   slave2:
     image: redis:6
-    container_name: redis-slave-2
+    container_name: redis-stack-slave-2
+    hostname: redis-stack-slave-2
     restart: always
-    command: redis-server --replicaof redis-master 6379 --requirepass fZg1AiarLQgrGSZz --masterauth kyUQ9xf7knPbYCQt --appendonly yes
+    command: redis-server --replicaof redis-stack-master 6379 --requirepass kyUQ9xf7knPbYCQt --masterauth kyUQ9xf7knPbYCQt --appendonly yes
     ports:
       - "6382:6379"
     environment:
@@ -67,11 +73,12 @@ services:
     depends_on:
       - master
     networks:
-      - redis-network
+      - redis-stack
 
   sentinel1:
     image: redis:6
-    container_name: redis-sentinel-1
+    container_name: redis-stack-sentinel-1
+    hostname: redis-stack-sentinel-1
     restart: always
     command: ["redis-sentinel", "/usr/local/etc/redis/redis-sentinel.conf"]
     environment:
@@ -82,11 +89,12 @@ services:
     depends_on:
       - master
     networks:
-      - redis-network
+      - redis-stack
 
   sentinel2:
     image: redis:6
-    container_name: redis-sentinel-2
+    container_name: redis-stack-sentinel-2
+    hostname: redis-stack-sentinel-2
     restart: always
     command: ["redis-sentinel", "/usr/local/etc/redis/redis-sentinel.conf"]
     environment:
@@ -97,11 +105,12 @@ services:
     depends_on:
       - slave1
     networks:
-      - redis-network
+      - redis-stack
 
   sentinel3:
     image: redis:6
-    container_name: redis-sentinel-3
+    container_name: redis-stack-sentinel-3
+    hostname: redis-stack-sentinel-3
     restart: always
     command: ["redis-sentinel", "/usr/local/etc/redis/redis-sentinel.conf"]
     environment:
@@ -112,8 +121,8 @@ services:
     depends_on:
       - slave2
     networks:
-      - redis-network
+      - redis-stack
 
 networks:
-  redis-network:
+  redis-stack:
     driver: bridge

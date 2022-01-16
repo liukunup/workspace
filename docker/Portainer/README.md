@@ -14,7 +14,7 @@
 
 ## 镜像拉取
 ``` bash
-docker pull portainer/portainer-ce:2.6.2
+docker pull portainer/portainer-ce:2.11.0
 ```
 
 ## 镜像运行
@@ -33,7 +33,7 @@ docker run -d \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v ${HOME}/docker/portainer:/data \
     --restart=always \
-    --name=workspace-portainer \
+    --name=xxx-portainer \
     portainer/portainer-ce:2.11.0
 ```
 
@@ -42,15 +42,3 @@ docker run -d \
 * 输入创建管理员账号密码, 点击"Create"按钮
 * 选择"Docker", 点击"Connect"按钮
 * enjoy >_<
-
-## 问题反馈
-* 邮件 (liukunwlb#163.com, 把#换成@)
-* 微信 liukun250596945
-
-## 关于作者
-``` javascript
-var liukunup = {
-  nickname  : "我的代码温柔如风",
-  site : "http://liukunup.com"
-}
-```

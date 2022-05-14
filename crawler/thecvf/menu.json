@@ -71,7 +71,14 @@
         "links": [
             "https://openaccess.thecvf.com/CVPR2013"
         ]
-    },        
+    },
+    {
+        "path": "WACV2022",
+        "logfile": "WACV2022.jsonl",
+        "links": [
+            "https://openaccess.thecvf.com/WACV2022"
+        ]
+    },
     {
         "path": "WACV2021",
         "logfile": "WACV2021.jsonl",
@@ -85,7 +92,15 @@
         "links": [
             "https://openaccess.thecvf.com/WACV2020"
         ]
-    },  
+    },
+    {
+        "path": "ICCV2021",
+        "logfile": "ICCV2021.jsonl",
+        "links": [
+            "https://openaccess.thecvf.com/ICCV2021?day=2021-10-12",
+            "https://openaccess.thecvf.com/ICCV2021?day=2021-10-13"
+        ]
+    },
     {
         "path": "ICCV2019",
         "logfile": "ICCV2019.jsonl",
@@ -115,6 +130,13 @@
         "logfile": "ICCV2013.jsonl",
         "links": [
             "https://openaccess.thecvf.com/ICCV2013"
+        ]
+    },
+    {
+        "path": "ACCV2020",
+        "logfile": "ACCV2020.jsonl",
+        "links": [
+            "https://openaccess.thecvf.com/ACCV2020"
         ]
     }
 ]

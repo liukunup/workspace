@@ -1,0 +1,40 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+# author : %s
+# date   : %s
+
+# 导入所需的依赖库
+import unittest
+
+# 题目编号: %s
+# 题目名称: %s
+# 题目难度: %s
+
+# 知识点: %s
+
+# 题目详情:
+"""
+%s
+"""
+
+# 请完成以下开发代码(如不符合语法要求,自行修改即可)
+%s
+
+
+# 请完成以下测试代码
+class SolutionTest(unittest.TestCase):
+
+    def setUp(self):
+        # 实例化
+        self.inst = Solution()
+
+    def tearDown(self):
+        pass
+
+    # 请设计一些测试用例来验证
+    def test_xxx(self):
+        self.assertEqual(0, -1)
+
+
+if __name__ == "__main__":
+    unittest.main()

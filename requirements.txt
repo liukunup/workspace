@@ -1,6 +1,23 @@
-beautifulsoup4==4.9.3
-minio==7.1.0
-PyYAML==5.4.1
-numpy==1.21.2
-opencv-python==4.5.3.56
-requests==2.26.0
+# 数据操作/数据分析/数据建模
+pandas
+# 数学计算
+numpy
+# 数据可视化
+matplotlib
+# 机器学习
+scikit-learn
+# 机器视觉
+opencv-python
+# 自然语言处理
+nltk
+
+# HTTP/HTTPS请求
+requests
+# 爬虫->页面解析
+beautifulsoup4
+# 数据库访问
+SQLAlchemy >=1.4, <2.0
+# 对象存储
+minio
+# 环境变量加载
+python-dotenv

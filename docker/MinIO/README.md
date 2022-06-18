@@ -14,7 +14,7 @@
 
 ## 镜像拉取
 ``` bash
-docker pull minio/minio:RELEASE.2021-08-25T00-41-18Z
+docker pull minio/minio:RELEASE.2022-06-17T02-00-35Z
 ```
 
 ## 镜像运行
@@ -34,8 +34,8 @@ docker run -d \
     -e MINIO_ROOT_USER=LehXBoVThyyDU3vZ \
     -e MINIO_ROOT_PASSWORD=Ggi057AOL8ZRrvxv \
     --restart=always \
-    --name=workspace-minio \
-    minio/minio:RELEASE.2021-08-25T00-41-18Z \
+    --name=minio \
+    minio/minio:RELEASE.2022-06-17T02-00-35Z \
     server /data \
     --address ":9000" \
     --console-address ":9001"
@@ -45,15 +45,3 @@ docker run -d \
 * 打开网站 http://your-ip:9001
 * 输入上述管理员账号密码, 点击登录按钮
 * enjoy >_<
-
-## 问题反馈
-* 邮件 (liukunwlb#163.com, 把#换成@)
-* 微信 liukun250596945
-
-## 关于作者
-``` javascript
-var liukunup = {
-  nickname  : "我的代码温柔如风",
-  site : "http://liukunup.com"
-}
-```

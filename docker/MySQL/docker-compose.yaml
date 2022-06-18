@@ -4,7 +4,7 @@ services:
 
   phpmyadmin:
     container_name: mysql-stack-phpmyadmin
-    image: phpmyadmin/phpmyadmin:5.1.1
+    image: phpmyadmin/phpmyadmin:5.2
     hostname: phpmyadmin
     restart: always
     ports:

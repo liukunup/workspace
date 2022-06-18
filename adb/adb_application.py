@@ -6,6 +6,7 @@
 import re
 import datetime
 
+from xml.dom.minidom import parse
 from adb import adb_core, adb_commands
 
 
@@ -110,7 +111,7 @@ def display(ip=None, port=5555, device_id=None, debug=False):
     pass
 
 
-def __locate_app_by_name(filename, app_name):
+def locate_app_by_name(filename, app_name):
     """
     根据名字定位桌面app图标的位置
     :param filename: ui.xml文件
@@ -160,5 +161,75 @@ def locate_app(app_name, ip=None, port=5555, device_id=None, debug=False):
     :return: 坐标, UI文件
     """
     fn = uiautomator(ip=ip, port=port, device_id=device_id, debug=debug)
-    res = __locate_app_by_name(fn, app_name)
+    res = locate_app_by_name(fn, app_name)
     return res, fn
+
+
+def locate_wx_msg_by_css(filename, rm_ts=True):
+    """
+    根据node属性定位消息
+    :param filename: ui.xml文件
+    :param rm_ts:    去除时间信息(仅保留对话内容)
+    :return: 坐标
+    """
+    msg_list = list()
+    with open(filename, encoding='UTF-8') as f:
+        contents = f.readlines()
+        pattern = re.compile(r'\<node '
+                             r'index="[0-9]+" '
+                             r'text="(?P<msg>\S+)" $'
+                             r'resource-id="com.tencent.mm:id/[A-Za-z0-9]+" '
+                             r'class="android.widget.TextView" '
+                             r'package="com.tencent.mm" '
+                             r'content-desc="" '
+                             r'checkable="\b(true|false)\b" '
+                             r'checked="\b(true|false)\b" '
+                             r'clickable="\b(true|false)\b" '
+                             r'enabled="\b(true|false)\b" '
+                             r'focusable="\b(true|false)\b" '
+                             r'focused="\b(true|false)\b" '
+                             r'scrollable="\b(true|false)\b" '
+                             r'long-clickable="\b(true|false)\b" '
+                             r'password="\b(true|false)\b" '
+                             r'selected="\b(true|false)\b" '
+                             r'bounds="'
+                             r'\[(?P<left>[0-9]+),'
+                             r'(?P<top>[0-9]+)\]'
+                             r'\[(?P<right>[0-9]+),'
+                             r'(?P<bottom>[0-9]+)\]" \/\>')
+        results = re.findall(pattern, str(contents))
+        for item in results:
+            # 如果需要去除时间消息
+            if rm_ts:
+                pattern_time = r'\d{2}:\d{2}$'
+                res = re.match(pattern_time, item[0])
+                if res:
+                    continue
+            msg_list.append([item[0], item[-4], item[-3], item[-2], item[-1]])
+        f.close()
+    return msg_list
+
+
+def locate_wx_msg_by_css_ex(filename, rm_ts=True):
+    """
+    根据node属性定位消息
+    :param filename: ui.xml文件
+    :param rm_ts:    去除时间信息(仅保留对话内容)
+    :return: 坐标
+    """
+    msg_list = list()
+    dom = parse(filename)
+    data = dom.documentElement
+    nodes = data.getElementsByTagName('node')
+    for node in nodes:
+        text = node.getAttribute('text')
+        if text:
+            # 如果需要去除时间消息
+            if rm_ts:
+                pattern_time = r'\d{2}:\d{2}$'
+                res = re.match(pattern_time, text)
+                if res:
+                    continue
+            msg_list.append([text])
+    return msg_list
+

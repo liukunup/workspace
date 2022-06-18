@@ -6,6 +6,20 @@
 from adb import adb_core
 
 
+def kb_text(msg, ip=None, port=5555, device_id=None, debug=False):
+    # https://github.com/senzhk/ADBKeyBoard
+    # https://github.com/senzhk/ADBKeyBoard/raw/master/ADBKeyboard.apk
+    # 支持中文 记得按照app哟
+    adb_core.shell(f"am broadcast -a ADB_INPUT_TEXT --es msg '{msg}'", ip=ip, port=port, device_id=device_id, debug=debug)
+
+
+def kb_clean(ip=None, port=5555, device_id=None, debug=False):
+    # https://github.com/senzhk/ADBKeyBoard
+    # https://github.com/senzhk/ADBKeyBoard/raw/master/ADBKeyboard.apk
+    # 清空输入框用这个
+    adb_core.shell('am broadcast -a ADB_CLEAR_TEXT', ip=ip, port=port, device_id=device_id, debug=debug)
+
+
 def text(msg, src='touchscreen', ip=None, port=5555, device_id=None, debug=False):
     """
     模拟文本框输入内容(注意需要先Focus在对应文本框)

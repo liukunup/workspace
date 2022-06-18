@@ -14,7 +14,7 @@
 
 # 拉取镜像
 ``` bash
-docker pull grafana/grafana:latest
+docker pull grafana/grafana:8.3.3
 ```
 
 # 启动镜像
@@ -24,23 +24,11 @@ docker run -d \
     -v ${HOME}/docker/grafana:/var/lib/grafana \
     --user=root \
     --restart=always \
-    --name=workspace-grafana \
-    grafana/grafana:latest
+    --name=grafana \
+    grafana/grafana:8.3.3
 ```
 
 ## 测试验证
 * 打开网站 http://your-ip:3000/
 * 默认账号密码 admin/admin
 * enjoy >_<
-
-## 问题反馈
-* 邮件 (liukunwlb#163.com, 把#换成@)
-* 微信 liukun250596945
-
-## 关于作者
-``` javascript
-var liukunup = {
-  nickname  : "我的代码温柔如风",
-  site : "http://liukunup.com"
-}
-```

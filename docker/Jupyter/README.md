@@ -16,7 +16,7 @@
 
 ## 镜像拉取
 ``` bash
-docker pull jupyter/minimal-notebook:notebook-6.4.0
+docker pull jupyter/minimal-notebook:notebook-6.4.12
 ```
 
 ## 镜像运行
@@ -35,10 +35,9 @@ docker run -d \
     -e GRANT_SUDO=yes \
     -v ${HOME}/docker/jupyter:/home/jovyan/work \
     --restart=always \
-    --name=workspace-jupyter \
-    jupyter/minimal-notebook:notebook-6.4.0 start-notebook.sh \
-    --NotebookApp.password='sha1:a7c0702d28e9:8a8868c5d4ea33af70e04c634487402b3997f40c' \
-    --NotebookApp.base_url=/jupyter/
+    --name=jupyter \
+    jupyter/minimal-notebook:notebook-6.4.12 start-notebook.sh \
+    --NotebookApp.password='sha1:a7c0702d28e9:8a8868c5d4ea33af70e04c634487402b3997f40c'
 ```
 
 ## 测试验证
@@ -47,16 +46,3 @@ docker run -d \
 * 在命令行窗口输入"docker ps"查找刚刚创建的容器实例
 * 通过命令行"docker logs [容器id]"查看日志, 找到token用于登陆
 * enjoy >_<
-
-## 问题反馈
-* 邮件 (liukunwlb#163.com, 把#换成@)
-* 微信 liukun250596945
-
-## 关于作者
-
-``` javascript
-var liukunup = {
-  nickname  : "我的代码温柔如风",
-  site : "http://liukunup.com"
-}
-```

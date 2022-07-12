@@ -1,7 +1,9 @@
 # Grafana
+
 ![Grafana](https://grafana.com/static/assets/internal/grafana_logo-web-dark.svg)
 
 ## 演示截图
+
 ![Grafana](https://grafana.com/products/assets/homepage_visual_2.png)
 
 ## 文档推荐
@@ -12,12 +14,23 @@
 * 官方文档 [Document](https://grafana.com/docs/)
 * GitHub [Issues](https://github.com/grafana/grafana/issues)
 
-# 拉取镜像
+## 拉取镜像
+
 ``` bash
-docker pull grafana/grafana:8.3.3
+docker pull grafana/grafana:latest
 ```
 
-# 启动镜像
+## 镜像运行
+
+### 准备工作
+
+``` bash
+mkdir ${HOME}/docker
+mkdir ${HOME}/docker/grafana
+```
+
+### 启动镜像
+
 ``` bash
 docker run -d \
     -p 3000:3000 \
@@ -25,10 +38,10 @@ docker run -d \
     --user=root \
     --restart=always \
     --name=grafana \
-    grafana/grafana:8.3.3
+    grafana/grafana:latest
 ```
 
 ## 测试验证
-* 打开网站 http://your-ip:3000/
+* 打开网站 http://your-ip-addr:3000/
 * 默认账号密码 admin/admin
 * enjoy >_<

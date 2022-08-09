@@ -19,5 +19,5 @@ phddns enable
 # 回显帮助文档链接
 echo "see https://service.oray.com/question/11630.html"
 
-# 重定向输入变量
-exec "$@"
+# 保持容器持续运行
+tail -f /dev/null

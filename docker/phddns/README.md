@@ -22,7 +22,7 @@ docker pull liukunup/phddns:latest
 docker run -d --net=host --name=phddns liukunup/phddns:latest
 ```
 
-4、设置&使用
+3、设置&使用
 
 1. 浏览器输入远程管理地址[b.oray.com](b.oray.com)进入花生壳远程管理页面, 输入重置花生壳时生成的SN码及默认密码admin进入;
 

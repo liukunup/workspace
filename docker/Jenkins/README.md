@@ -9,7 +9,7 @@
 ## 拉取镜像
 
 ```bash
-docker pull jenkinsci/blueocean:lts
+docker pull jenkinsci/blueocean:latest
 ```
 
 ## 镜像运行
@@ -17,13 +17,13 @@ docker pull jenkinsci/blueocean:lts
 ### 启动镜像
 
 ```bash
-docker run \
-  -u root \
-  --rm \  
-  -d \ 
-  -p 8080:8080 \ 
-  -p 50000:50000 \ 
-  -v jenkins-data:/var/jenkins_home \ 
-  -v /var/run/docker.sock:/var/run/docker.sock \ 
-  jenkinsci/blueocean:lts
+docker run -d \
+  -p 8087:8080 \
+  -p 50000:50000 \
+  -v jenkins-data:/var/jenkins_home \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  --user=root \
+  --restart=unless-stopped \
+  --name=jenkinsci-blueocean \
+  jenkinsci/blueocean:latest
 ```

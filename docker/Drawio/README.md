@@ -12,7 +12,7 @@
 
 ## 镜像拉取
 ``` bash
-docker pull jgraph/drawio:20.0.1
+docker pull jgraph/drawio:20.2.3
 ```
 
 ## 镜像运行
@@ -24,7 +24,7 @@ docker run -d \
     -p 8443:8443 \
     --restart=always \
     --name=drawio \
-    jgraph/drawio:20.0.1
+    jgraph/drawio:20.2.3
 ```
 
 ## 测试验证

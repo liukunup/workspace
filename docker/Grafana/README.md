@@ -16,7 +16,7 @@
 
 ## 拉取镜像
 
-``` bash
+```bash
 docker pull grafana/grafana:latest
 ```
 
@@ -24,24 +24,46 @@ docker pull grafana/grafana:latest
 
 ### 准备工作
 
-``` bash
+```bash
 mkdir ${HOME}/docker
 mkdir ${HOME}/docker/grafana
 ```
 
 ### 启动镜像
 
-``` bash
+```bash
+docker run -d \
+    -p 3000:3000 \
+    --restart=always \
+    --name=grafana \
+    grafana/grafana:latest
+```
+
+### 反向代理
+
+1. 拉起容器
+
+```bash
 docker run -d \
     -p 3000:3000 \
     -v ${HOME}/docker/grafana:/var/lib/grafana \
+    -e GF_SERVER_ROOT_URL='%(protocol)s://%(domain)s:%(http_port)s/grafana' \
+    -e GF_SERVER_SERVE_FROM_SUB_PATH=true \
+    -e GF_SECURITY_ADMIN_USER=liukunup \
+    -e GF_SECURITY_ADMIN_PASSWORD=123456 \
     --user=root \
     --restart=always \
     --name=grafana \
     grafana/grafana:latest
 ```
 
-## 测试验证
-* 打开网站 http://your-ip-addr:3000/
-* 默认账号密码 admin/admin
-* enjoy >_<
+2. 配置反向代理
+
+核心配置
+
+```text
+location /grafana/ {
+    proxy_pass http://prod.liukun.com:3000;
+    include nginxconfig.io/proxy.conf;
+}
+```

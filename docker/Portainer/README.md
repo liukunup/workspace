@@ -14,7 +14,7 @@
 
 ## 镜像拉取
 ``` bash
-docker pull portainer/portainer-ce:2.11.0
+docker pull portainer/portainer-ce:2.14.2
 ```
 
 ## 镜像运行
@@ -33,8 +33,8 @@ docker run -d \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v ${HOME}/docker/portainer:/data \
     --restart=always \
-    --name=xxx-portainer \
-    portainer/portainer-ce:2.11.0
+    --name=portainer \
+    portainer/portainer-ce:2.14.2
 ```
 
 ## 测试验证

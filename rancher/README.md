@@ -73,7 +73,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 ```shell
 # 下载
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/arm64/kubectl"
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
 # 新增执行权限
 chmod +x kubectl
 # 拷贝+修改所有权

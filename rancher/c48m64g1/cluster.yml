@@ -205,7 +205,7 @@ ingress:
   default_http_backend_priority_class_name: ""
   nginx_ingress_controller_priority_class_name: ""
   default_ingress_class: null
-cluster_name: "rke.cluster"
+cluster_name: "cluster.rke"
 cloud_provider:
   name: ""
 prefix_path: ""

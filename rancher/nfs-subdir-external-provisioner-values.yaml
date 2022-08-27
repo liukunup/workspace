@@ -1,0 +1,10 @@
+storageClass:
+  name: nas-qnap-kubernetes
+  defaultClass: true
+  allowVolumeExpansion: true
+  provisionerName: k8s-sigs.io/nfs-subdir-external-provisioner
+nfs:
+  server: qnap.liukun.com
+  path: /Kubernetes
+  mountOptions:
+    - nfsvers=4.2

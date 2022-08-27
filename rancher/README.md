@@ -2,6 +2,7 @@
 
 Rancher Kubernetes Engine，简称 RKE，是一个经过 CNCF 认证的 Kubernetes 安装程序。RKE 支持多种操作系统，包括 MacOS、Linux 和 Windows，可以在裸金属服务器（BMS）和虚拟服务器（Virtualized Server）上运行。
 
+
 ## 搭建步骤 [官方安装手册](https://docs.rancher.cn/docs/rke/installation/_index)
 
 1. 下载RKE
@@ -90,7 +91,60 @@ kubectl version --client
 kubectl get nodes -o wide
 # 查看Pod情况
 kubectl get pods --all-namespaces -o wide
+# 获取Token
+kubectl describe $(kubectl get secret -n kube-system -o name | grep namespace) -n kube-system | grep token
 ```
+
+
+## 安装组件/插件...
+
+### NFS Subdir External Provisioner
+
+解决持久化卷的问题
+
+国内受到GFW的影响，最好提前下载好`k8s.gcr.io/sig-storage/nfs-subdir-external-provisioner`镜像。
+
+```shell
+# 国内镜像替代品
+export IMAGE=willdockerhub/nfs-subdir-external-provisioner
+export VERSION=v4.0.2
+# 拉取
+docker pull ${IMAGE}:${VERSION}
+# 打标
+docker tag ${IMAGE}:${VERSION} k8s.gcr.io/sig-storage/nfs-subdir-external-provisioner:${VERSION}
+# 删除
+docker rmi ${IMAGE}:${VERSION}
+```
+
+查看[配置参数](nfs-subdir-external-provisioner-values.yaml)
+
+```shell
+# 新增 Helm Chart
+helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+# 安装 nfs-subdir-external-provisioner
+helm install nfs-subdir-external-provisioner \
+  -f nfs-subdir-external-provisioner-values.yaml \
+  -n kube-system \
+  nfs-subdir-external-provisioner/nfs-subdir-external-provisioner
+```
+
+### MetalLB
+
+解决`LoadBalancer`的问题
+
+查看[配置参数](metallb-config.yaml)
+
+```shell
+# 创建命名空间
+kubectl create namespace metallb-system
+# 新增 Helm Chart
+helm repo add metallb https://metallb.github.io/metallb
+# 安装 metallb
+helm install metallb --namespace metallb-system metallb/metallb
+# 更新配置
+kubectl apply -f metallb-config.yaml
+```
+
 
 ## 可视化管理界面
 

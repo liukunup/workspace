@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+
+  nextcloud:
+    image: nextcloud:23-apache
+    container_name: nextcloud
+    hostname: nextcloud
+    restart: always
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
+    volumes:
+      - ${HOME}/docker/nextcloud/nextcloud:/var/www/html
+      - ${HOME}/docker/nextcloud/apps:/var/www/html/custom_apps
+      - ${HOME}/docker/nextcloud/config:/var/www/html/config
+      - ${HOME}/docker/nextcloud/data:/var/www/html/data
+      - ${HOME}/docker/nextcloud/theme:/var/www/html/themes/custom
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8086:80"
+    networks:
+      - nextcloud
+
+networks:
+  nextcloud:
+    external: false

@@ -30,3 +30,15 @@ docker run -d \
   --name=nextcloud \
   nextcloud:22.2.10-apache
 ```
+
+## 安装插件
+
+### smbclient
+
+```shell
+docker exec -it nextcloud bash
+apt update
+apt install smbclient libsmbclient-dev
+pecl install smbclient
+docker-php-ext-enable smbclient
+```

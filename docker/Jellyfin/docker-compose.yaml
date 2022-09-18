@@ -1,0 +1,24 @@
+version: "2.1"
+
+services:
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    hostname: jellyfin
+    restart: always
+    ports:
+      - "8096:8096"
+      - "8920:8920"
+      - "7359:7359/udp"
+      - "1900:1900/udp"
+    volumes:
+      - ${HOME}/docker/jellyfin/fonts:/usr/share/fonts/truetype/dejavu
+      - ${HOME}/docker/jellyfin/library:/config
+      - ${HOME}/docker/jellyfin/tvseries:/data/tvshows
+      - ${HOME}/Media:/data/movies
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      - JELLYFIN_PublishedServerUrl=qnap.liukun.com

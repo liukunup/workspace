@@ -13,7 +13,6 @@ services:
       - "7359:7359/udp"
       - "1900:1900/udp"
     volumes:
-      - ${HOME}/docker/jellyfin/fonts:/usr/share/fonts/truetype/dejavu
       - ${HOME}/docker/jellyfin/library:/config
       - ${HOME}/docker/jellyfin/tvseries:/data/tvshows
       - ${HOME}/Media:/data/movies
